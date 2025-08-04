@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Team Registration</title>
+</head>
+<body>
+    {% extends "base.html" %}
+
+{% block title %}Home{% endblock %}
+
+{% block content %}
+<h1>Welcome to the site!</h1>
+{% endblock %}
+</nav>
+    <h1>Welcome to Spin & Speak!</h1>
+    <p>Please register to join a team and participate in the game.</p>
+    <h1>Register</h1>
+    <form method="POST" action="/register">
+        <label for="name">Your Name:</label>
+        <input type="text" id="name" name="name" required><br><br>
+
+        <label for="team_name">Select Your Team:</label>
+        <select id="team_name" name="team_name" required>
+            <option value="Executive Team">Executive Team</option>
+            <option value="Review Team">Review Team</option>
+            <option value="Teaching Team">Teaching Team</option>
+            <option value="Energizer Team">Energizer Team</option>
+            <option value="Feedback Team">Feedback Team</option>
+        </select><br><br>
+
+        <label for="role">Select Your Role:</label>
+        <select id="role" name="role" required>
+            <option value="Leader">Leader</option>
+            <option value="Recorder">Recorder</option>
+            <option value="Participant-Analyst">Participant-Analyst</option>
+            <option value="Reporter">Reporter</option>
+        </select><br><br>
+
+        <label for="question">Ask a fun/feedback question (optional):</label><br>
+        <textarea id="question" name="question" rows="3" cols="30"></textarea><br><br>
+
+        <button type="submit">Register</button>
+    </form>
+</body>
+</html>

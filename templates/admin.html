@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Admin Control</title>
+</head>
+<body>
+  <h1>Admin Control Panel</h1>
+  <button id="startBtn">Start Game</button>
+
+  <script>
+    document.getElementById('startBtn').addEventListener('click', async () => {
+      try {
+        const res = await fetch('/admin/start', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        });
+        const data = await res.json();
+        if (data.success) {
+          // Show message (optional)
+          alert('Game started!');
+          // Redirect to spinner
+          window.location.href = "/spin";
+        } else {
+          alert('Failed to start game.');
+        }
+      } catch (err) {
+        alert('Error starting game.');
+        console.error(err);
+      }
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Wheel Spinner</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      padding: 20px;
+      background: #f9f9f9;
+    }
+    canvas {
+      margin: 30px auto;
+      display: block;
+      background: #fff;
+      border: 5px solid #007bff;
+      border-radius: 50%;
+      max-width: 90vw;
+      max-height: 90vw;
+    }
+    #spinBtn {
+      font-size: 20px;
+      padding: 12px 28px;
+      background-color: #007bff;
+      border: none;
+      color: white;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+    #spinBtn:disabled {
+      background-color: #999;
+      cursor: not-allowed;
+    }
+    #result {
+      font-size: 24px;
+      margin-top: 20px;
+      font-weight: bold;
+      min-height: 30px;
+    }
+  </style>
+</head>
+<body>
+  <h1>Wheel of Teams</h1>
+  <canvas id="wheelCanvas" width="400" height="400"></canvas>
+<div id="resultDiv">Press Spin to select a team</div>
+<button id="removeBtn" style="display:none;">Remove Team</button>
+<button id="spinBtn">Spin</button>
+
+
+  <div id="result"></div>
+
+  <!-- Include Socket.IO -->
+   <script src="//cdnjs.cloudflare.com/ajax/libs/socket.io/4.6.1/socket.io.min.js"></script>
+<script>
+  const socket = io();  // Make sure this line exists so socket is connected
+</script>
+
+    <!-- Include Socket.IO -->
+  <script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
+
+  <!-- Define admin flag and initialize socket -->
+
+  <!-- Include your wheel logic -->
+  <script src="/static/spinner.js"></script>
+</body>
+</html>
+

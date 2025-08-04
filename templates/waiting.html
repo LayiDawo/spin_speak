@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Waiting Room</title>
+  <link rel="stylesheet" href="/static/style.css">
+  <script>
+    async function checkGameStart() {
+  try {
+    const res = await fetch('/game-status');
+    const data = await res.json();
+    if (data.started) {  // This key must match backend JSON
+      window.location.href = "/spin?role=admin";  // Redirect to spin page
+    }
+  } catch (e) {
+    console.error("Could not check game status.");
+  }
+}
+setInterval(checkGameStart, 3000);
+    async function startGame() {
+      try {
+        const res = await fetch('/start-game', {
+          method: "POST",
+        });
+        const result = await res.json();
+        if (result.success) {
+          console.log("Game started");
+        }
+      } catch (e) {
+        console.error("Failed to start game.");
+      }
+    }
+
+    setInterval(checkGameStart, 3000);
+  </script>
+</head>
+<body>
+  <h1>Waiting for the admin to start the game...</h1>
+  <p>This page will redirect automatically once the game begins.</p>
+
+  {% if role == 'admin' %}
+    <button onclick="startGame()">Start Game</button>
+  {% endif %}
+</body>
+</html>

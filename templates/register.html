@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Team Registration</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      max-width: 600px;
+      margin: 40px auto;
+      padding: 20px;
+      background: #f9f9f9;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    h1 {
+      text-align: center;
+      color: #333;
+    }
+    label {
+      font-weight: bold;
+      display: block;
+      margin-top: 15px;
+    }
+    input[type="text"], select {
+      width: 100%;
+      padding: 8px;
+      margin-top: 6px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      box-sizing: border-box;
+    }
+    button {
+      margin-top: 20px;
+      background-color: #4CAF50;
+      color: white;
+      padding: 12px 20px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 16px;
+      width: 100%;
+    }
+    button:hover {
+      background-color: #45a049;
+    }
+  </style>
+</head>
+<body>
+  <h1>Register Your Team</h1>
+  <form action="/register" method="POST">
+  <label for="team_name">Select Your Team:</label>
+  <select id="team_name" name="team_name" required>
+    <option value="">-- Select a Team --</option>
+    <option value="Executive Team">Executive Team</option>
+    <option value="Review Team">Review Team</option>
+    <option value="Teaching Team">Teaching Team</option>
+    <option value="Energizer Team">Energizer Team</option>
+    <option value="Feedback Team">Feedback Team</option>
+  </select><br><br>
+
+  <label for="team_role">Select Your Team Role:</label>
+<select id="team_role" name="team_role" required>
+  <option value="">-- Select a Role --</option>
+  <option value="Leader">Leader</option>
+  <option value="Recorder">Recorder</option>
+  <option value="Participant-Analyst">Participant-Analyst</option>
+  <option value="Reporter">Reporter</option>
+</select><br><br>
+
+  <label for="name">Your Name:</label>
+  <input type="text" id="name" name="name" required><br><br>
+
+  <label for="question">Fun Question (Optional):</label>
+  <input type="text" id="question" name="question"><br><br>
+
+<label>
+  <input type="radio" name="role" value="participant" checked> Participant
+</label>
+<label>
+  <input type="radio" name="role" value="admin"> Admin
+</label>
+
+
+  <button type="submit">Submit</button>
+
+  
+</form>
+
+
+</body>
+</html>

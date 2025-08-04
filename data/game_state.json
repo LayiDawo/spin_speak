@@ -1,0 +1,11 @@
+{
+  "round": 1,
+  "remaining_teams": [
+    "Executive Team",
+    "Review Team",
+    "Teaching Team",
+    "Energizer Team"
+  ],
+  "spun_teams": [],
+  "started": false
+}

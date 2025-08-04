@@ -1,0 +1,116 @@
+body {
+  font-family: Arial, sans-serif;
+  text-align: center;
+  padding: 20px;
+  background: #f9f9f9;
+}
+
+nav {
+  margin-bottom: 20px;
+}
+
+#spinner {
+  margin: 50px auto;
+  font-size: 48px;
+  font-weight: bold;
+  height: 100px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #333;
+  border: 4px solid #007bff;
+  border-radius: 12px;
+  background-color: #e9f0ff;
+  user-select: none;
+  transition: color 0.5s ease;
+}
+
+#round {
+  font-size: 24px;
+  margin-bottom: 20px;
+}
+
+button#spinBtn {
+  font-size: 20px;
+  padding: 12px 28px;
+  background-color: #007bff;
+  border: none;
+  color: white;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+button#spinBtn:disabled {
+  background-color: #999;
+  cursor: not-allowed;
+}
+
+button#spinBtn:hover:not(:disabled) {
+  background-color: #0056b3;
+}
+
+#controls {
+  margin-top: 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+#timer {
+  font-size: 20px;
+  font-weight: bold;
+  color: #d9534f;
+}
+
+#reset-btn {
+  padding: 8px 16px;
+  background-color: #f0ad4e;
+  border: none;
+  color: white;
+  font-weight: bold;
+  border-radius: 8px;
+  cursor: pointer;
+}
+#reset-btn:hover {
+  background-color: #ec971f;
+}
+#reset-btn:disabled {
+  background-color: #999;
+  cursor: not-allowed;
+}
+#sentence-area {
+  font-size: 24px;
+  margin-top: 20px;
+  padding: 10px;
+  border: 2px dashed #007bff;
+  background-color: #e9f0ff;
+  min-height: 50px;
+}
+#sentence-area span {
+  display: inline-block;
+  margin: 0 5px;
+  padding: 5px 10px;
+  background-color: #fff;
+  border: 1px solid #007bff;
+  border-radius: 4px;
+  cursor: pointer;
+}
+#sentence-area span:hover {
+  background-color: #007bff;
+  color: white;
+}
+#sentence-area span.selected {
+  background-color: #28a745;
+  color: white;
+}
+#sentence-area span.selected:hover {
+  background-color: #218838;
+}
+#sentence-area span.selected:active {
+  background-color: #1e7e34;
+}
+#sentence-area span.selected:focus {
+  outline: none;
+  box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+}

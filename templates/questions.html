@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Team Question: {{ team }}</title>
+  <link rel="stylesheet" href="/static/style.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.5.4/socket.io.min.js"></script>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 20px; }
+    h1 { margin-bottom: 10px; }
+    .word-bank, .sentence { 
+      min-height: 60px;
+      padding: 10px;
+      border: 2px dashed #ccc;
+      border-radius: 8px;
+      margin-bottom: 20px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+    .word {
+      padding: 8px 12px;
+      background: #e0f7fa;
+      border: 1px solid #00838f;
+      border-radius: 5px;
+      cursor: grab;
+    }
+    .word.dragging {
+      opacity: 0.5;
+    }
+  </style>
+</head>
+<body>
+  <h1>{{ team }}</h1>
+  <h2>Question:</h2>
+  <p><strong>{{ question }}</strong></p>
+
+  <h3>Arrange the sentence below (you can use the words any way you like):</h3>
+
+  <div class="word-bank" id="word-bank">
+    {% for word in words_pool %}
+      <div class="word" draggable="true">{{ word }}</div>
+    {% endfor %}
+  </div>
+
+  <h3>Your Team's Sentence:</h3>
+  <div class="sentence" id="sentence-area"></div>
+  <div id="controls">
+  <button id="reset-btn">Reset Sentence</button>
+  <div id="timer">Time left: <span id="time">60</span>s</div>
+</div>
+  <script>
+  const team = "{{ team }}";
+  const socket = io();
+
+  const wordBank = document.getElementById('word-bank');
+  const sentenceArea = document.getElementById('sentence-area');
+
+  // Original word pool (static)
+  const originalWords = Array.from(wordBank.children).map(w => w.textContent.trim());
+
+  let dragged;
+
+  document.addEventListener('dragstart', function (e) {
+    if (e.target.classList.contains('word')) {
+      dragged = e.target;
+      e.target.classList.add('dragging');
+    }
+  });
+
+  document.addEventListener('dragend', function (e) {
+    if (dragged) {
+      dragged.classList.remove('dragging');
+      dragged = null;
+    }
+  });
+
+  [wordBank, sentenceArea].forEach(area => {
+    area.addEventListener('dragover', e => e.preventDefault());
+    area.addEventListener('drop', e => {
+      e.preventDefault();
+      if (dragged && dragged.parentNode !== area) {
+        area.appendChild(dragged);
+        broadcastOrder();
+      }
+    });
+  });
+
+  function broadcastOrder() {
+    const order = Array.from(sentenceArea.children).map(w => w.textContent.trim());
+    socket.emit('update_order', { team, order });
+  }
+
+  socket.emit('join_team', { team });
+
+  socket.on('order_updated', data => {
+    if (data.team === team) {
+      // Clear both areas
+      sentenceArea.innerHTML = "";
+      wordBank.innerHTML = "";
+
+      // Re-render sentence
+      data.order.forEach(word => {
+        const div = document.createElement("div");
+        div.className = "word";
+        div.draggable = true;
+        div.textContent = word;
+        sentenceArea.appendChild(div);
+      });
+
+      // Re-render word bank with unused words
+      const usedWords = data.order;
+      const unusedWords = originalWords.filter(w => {
+        // Only exclude used count times (handle duplicates correctly)
+        const usedCount = usedWords.filter(u => u === w).length;
+        const wordBankCount = originalWords.filter(o => o === w).length;
+        return usedCount < wordBankCount;
+      });
+
+      // Count how many times each word is already used
+      const wordUsage = {};
+      usedWords.forEach(w => wordUsage[w] = (wordUsage[w] || 0) + 1);
+
+      const wordBankUsage = {};
+      originalWords.forEach(w => {
+        const used = wordUsage[w] || 0;
+        const available = (wordBankUsage[w] || 0) + 1;
+
+        if (available > used) {
+          wordBankUsage[w] = available;
+        } else {
+          wordBankUsage[w] = used; // saturate
+        }
+      });
+
+      for (let word of originalWords) {
+        const used = wordUsage[word] || 0;
+        const bankCount = Array.from(wordBank.children).filter(el => el.textContent === word).length;
+        const sentenceCount = usedWords.filter(w => w === word).length;
+
+        // Only add if it hasn't already been fully used
+        const totalAllowed = originalWords.filter(w => w === word).length;
+        const currentCount = sentenceCount + bankCount;
+
+        if (currentCount < totalAllowed) {
+          const div = document.createElement("div");
+          div.className = "word";
+          div.draggable = true;
+          div.textContent = word;
+          wordBank.appendChild(div);
+        }
+      }
+    }
+  });
+  let timeLeft = 60;
+let timerInterval;
+const timerDisplay = document.getElementById("time");
+
+async function syncTimer() {
+  try {
+    const res = await fetch(`/api/time_left/${encodeURIComponent(team)}`);
+    const data = await res.json();
+    let timeLeft = data.time_left;
+
+    if (timerInterval) clearInterval(timerInterval);
+
+    timerDisplay.textContent = timeLeft;
+
+    timerInterval = setInterval(() => {
+      timeLeft--;
+      if (timeLeft < 0) {
+        clearInterval(timerInterval);
+        timerDisplay.textContent = 0;
+        alert("Time is up!");
+      } else {
+        timerDisplay.textContent = timeLeft;
+      }
+    }, 1000);
+  } catch (err) {
+    console.error("Timer sync error:", err);
+  }
+}
+
+// Reset button still works as-is
+document.getElementById("reset-btn").addEventListener("click", () => {
+  socket.emit("reset_sentence", { team });
+});
+
+// Start synced timer on page load
+syncTimer();
+
+</script>
+
+</body>
+</html>
